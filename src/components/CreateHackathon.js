@@ -259,7 +259,7 @@ const CreateHackathon = () => {
                     Welcome! Create a new hackathon here.
                 </Typography>
                 <form className="mt-3 mb-2 md:mb-6 md:px-8 xl:px-16">
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-y-4 gap-x-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-4 gap-x-8">
                         {/* <div className="mb-1 flex flex-col gap-4"> */}
                         <div className="flex flex-col gap-4">
                             <Typography
@@ -305,7 +305,7 @@ const CreateHackathon = () => {
                                             color="blue-gray"
                                             className="relative flex h-10 w-full justify-between gap-2 border border-blue-gray-200 bg-blue-gray-500/10 pl-3 pr-2"
                                         >
-                                            {formData?.theme}
+                                            <span className="truncate mr-4">{formData?.theme}</span>
                                             <ChevronDownIcon className="absolute w-4 h-4 right-2" />
                                         </Button>
                                     </MenuHandler>
@@ -516,7 +516,7 @@ const CreateHackathon = () => {
                                 </Typography>
                             )}
                         </div>
-                        <div className="flex flex-col gap-4 md:col-span-2">
+                        <div className="flex flex-col gap-4 sm:col-span-2">
                             <Typography
                                 variant="h6"
                                 color="blue-gray"
@@ -543,7 +543,7 @@ const CreateHackathon = () => {
                                 </Typography>
                             )}
                         </div>
-                        <div className="flex flex-col gap-4 md:col-span-2">
+                        <div className="flex flex-col gap-4 sm:col-span-2">
                             <Typography
                                 variant="h6"
                                 color="blue-gray"
@@ -571,7 +571,7 @@ const CreateHackathon = () => {
                                 </Typography>
                             )}
                         </div>
-                        <div className="flex flex-col gap-4 md:col-span-2">
+                        <div className="flex flex-col gap-4 sm:col-span-2">
                             <Typography
                                 variant="h6"
                                 color="blue-gray"
@@ -599,7 +599,7 @@ const CreateHackathon = () => {
                                 </Typography>
                             )}
                         </div>
-                        <div className="flex flex-col gap-4 md:col-span-2">
+                        <div className="flex flex-col gap-4 sm:col-span-2">
                             <Typography
                                 variant="h6"
                                 color="blue-gray"

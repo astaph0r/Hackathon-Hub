@@ -16,11 +16,18 @@ import { Link } from "react-router-dom";
 const TABLE_HEAD = [
     "Hackathon",
     "Theme",
-    // "Panelists",
-    // "Judges",
-    // "Status",
+    "Start Time",
+    "Teams Registered",
+    "Status",
     "Actions",
 ];
+const statusColors = {
+    started: "green",
+    created: "blue",
+    cancelled: "red",
+    ended: "orange",
+    // status-color mappings as needed
+};
 
 const ListHackathon = () => {
     // const data = HACKATHONS;
@@ -67,8 +74,8 @@ const ListHackathon = () => {
                                     key={head}
                                     className={
                                         head === "Theme" ||
-                                        head === "Panelists" ||
-                                        head === "Judges" ||
+                                        head === "Teams Registered" ||
+                                        head === "Start Time" ||
                                         head === "Actions"
                                             ? "border-b border-blue-gray-100 bg-blue-gray-50 p-4 hidden lg:table-cell"
                                             : "border-b border-blue-gray-100 bg-blue-gray-50 p-4"
@@ -114,6 +121,51 @@ const ListHackathon = () => {
                                             {hackathon.theme}
                                         </Typography>
                                     </td>
+                                    <td className="p-4 hidden lg:table-cell">
+                                        <Typography
+                                            variant="small"
+                                            color="blue-gray"
+                                            className="font-normal"
+                                        >
+                                            {hackathon.startDate.split(" ")[0] +
+                                                " " +
+                                                hackathon.startDate
+                                                    .split(" ")[1]
+                                                    .split(":")
+                                                    .slice(0, 2)
+                                                    .join(":")}
+                                        </Typography>
+                                    </td>
+                                    <td className="p-4 hidden lg:table-cell">
+                                        <Typography
+                                            variant="small"
+                                            color="blue-gray"
+                                            className="font-normal"
+                                        >
+                                            {hackathon.noOfTeamsRegistered}
+                                        </Typography>
+                                    </td>
+                                    <td className="p-4">
+                                        <span className="flex">
+                                            <Chip
+                                                variant="small"
+                                                size="sm"
+                                                value={
+                                                    hackathon.hackathonStatus
+                                                }
+                                                color={
+                                                    statusColors[
+                                                        hackathon
+                                                            .hackathonStatus
+                                                    ] || "blue-gray"
+                                                }
+                                                className="font-bold text-white flex"
+                                                // style={{width: '90px', fontWeight: 'bold', color: 'white' }} // Inline styles here
+                                            >
+                                                {hackathon.hackathonStatus}
+                                            </Chip>
+                                        </span>
+                                    </td>
                                     {/* <td className="p-4 hidden lg:table-cell">
                                         <Typography
                                             variant="small"
@@ -140,7 +192,8 @@ const ListHackathon = () => {
                                         />
                                     </td> */}
                                     <td className="p-4 hidden lg:table-cell">
-                                        {hackathon?.hackathonStatus === "ended" ? (
+                                        {hackathon?.hackathonStatus ===
+                                        "ended" ? (
                                             <Link
                                                 to={`/results/${hackathon.hackathonId}`}
                                             >
@@ -152,12 +205,14 @@ const ListHackathon = () => {
                                                     Result
                                                 </Button>
                                             </Link>
-                                        ) : (
+                                        ) : hackathon?.hackathonStatus ===
+                                          "started" ? (
                                             <Button
                                                 className="flex items-center gap-3"
                                                 size="sm"
                                                 disabled={
-                                                    hackathon?.hackathonStatus === "ended"
+                                                    hackathon?.hackathonStatus ===
+                                                    "ended"
                                                 }
                                                 onClick={() => {
                                                     handleHackathonEnd(
@@ -168,6 +223,14 @@ const ListHackathon = () => {
                                                 {/* <PencilIcon className="h-4 w-4" /> */}
                                                 End
                                             </Button>
+                                        ) : (
+                                            <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-normal"
+                                            >
+                                                N/A
+                                            </Typography>
                                         )}
                                         {/* <Button
                                             className="flex items-center gap-3"
