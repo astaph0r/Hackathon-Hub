@@ -195,6 +195,41 @@ const HackathonDetails = ({ hackathons, selectedHackathonId }) => {
                                                 color="blue-gray"
                                                 className="leading-none"
                                             >
+                                                Implementation Start Time:{" "}
+                                                {dateConverter(
+                                                    selectedHackathon?.shortListDeadline
+                                                ) || " "}
+                                            </Typography>
+                                        </TimelineHeader>
+                                        <TimelineBody className="pb-8">
+                                            <Typography
+                                                variant="small"
+                                                color="gray"
+                                                className="font-normal text-gray-600"
+                                            >   Once your idea is approved, it's
+                                                time to bring it to life!
+                                                 This marks the beginning of the 
+                                                 implementation phase. It's the point 
+                                                 where you start executing your project 
+                                                 plan and bringing your idea to life...
+                                                Feel free to make changes or
+                                                expand on your
+                                                initial idea as you see fit. Be
+                                                innovative, be creative, and
+                                                make your vision a reality. Good
+                                                luck!
+                                            </Typography>
+                                        </TimelineBody>
+                                    </TimelineItem>
+                                    <TimelineItem>
+                                        <TimelineConnector />
+                                        <TimelineHeader className="h-3">
+                                            <TimelineIcon />
+                                            <Typography
+                                                variant="h6"
+                                                color="blue-gray"
+                                                className="leading-none"
+                                            >
                                                 Implementation Deadline:{" "}
                                                 {dateConverter(
                                                     selectedHackathon?.implementationSubmissionDeadline
@@ -207,15 +242,10 @@ const HackathonDetails = ({ hackathons, selectedHackathonId }) => {
                                                 color="gray"
                                                 className="font-normal text-gray-600"
                                             >
-                                                Once your idea is approved, it's
-                                                time to bring it to life!
-                                                Implement your project before
-                                                the deadline. Feel free to make
-                                                changes or expand on your
-                                                initial idea as you see fit. Be
-                                                innovative, be creative, and
-                                                make your vision a reality. Good
-                                                luck!
+                                                This is the final date and time by which you 
+                                                need to complete the implementation of your ideas.
+                                                 It's important to ensure that you finish all tasks
+                                                  and meet all objectives before this deadline.
                                             </Typography>
                                         </TimelineBody>
                                     </TimelineItem>
@@ -294,7 +324,7 @@ const HackathonDetails = ({ hackathons, selectedHackathonId }) => {
                         </div>
                         <div className="w-fit mt-2 mx-auto">
                             {user?.role === "participant" &&
-                            !selectedHackathon?.hackathonStatus === "started" ? (
+                            selectedHackathon?.hackathonStatus === "started" ? (//removed ! in this line
                                 <Button
                                     disabled={!user.available}
                                     onClick={() => setOpen((cur) => !cur)}
