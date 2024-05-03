@@ -142,13 +142,12 @@ const ListHackathon = () => {
                                             color="blue-gray"
                                             className="font-normal"
                                         >
-                                            {hackathon.noOfTeamsRegistered}
+                                            {hackathon.noOfTeamsRegistered || "N/A"}
                                         </Typography>
                                     </td>
                                     <td className="p-4">
                                         <span className="flex">
                                             <Chip
-                                                variant="small"
                                                 size="sm"
                                                 value={
                                                     hackathon.hackathonStatus
