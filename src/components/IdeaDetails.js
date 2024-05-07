@@ -276,6 +276,16 @@ const IdeaDetails = () => {
 
     const handleBotRecommendation = async () => {
         const newErrors = {};
+        if (!ideaData.ideaTitle) {
+            newErrors.ideaTitle = "Idea Title is Required!";
+        }
+        if (ideaData.ideaTitle && ideaData.ideaTitle.length > 255) {
+            newErrors.ideaTitle =
+                "Idea Title Should Not Contain More Than 255 Characters";
+        }
+        if (!ideaData.ideaDomain) {
+            newErrors.ideaDomain = "Theme Is Required";
+        }
         if (!ideaData.ideaBody) {
             newErrors.ideaBody = "Idea Description Is Required";
         }
@@ -313,13 +323,23 @@ const IdeaDetails = () => {
 
     const handleBotRewrite = async () => {
         const newErrors = {};
+        if (!ideaData.ideaTitle) {
+            newErrors.ideaTitle = "Idea Title is Required!";
+        }
+        if (ideaData.ideaTitle && ideaData.ideaTitle.length > 255) {
+            newErrors.ideaTitle =
+                "Idea Title Should Not Contain More Than 255 Characters";
+        }
+        if (!ideaData.ideaDomain) {
+            newErrors.ideaDomain = "Theme Is Required";
+        }
         if (!ideaData.ideaBody) {
             newErrors.ideaBody = "Idea Description Is Required";
         }
         if (ideaData.ideaBody && ideaData.ideaBody.length > 3000) {
             newErrors.ideaBody =
                 "Idea Title Should Not Contain More Than 3000 Characters";
-        }
+        }   
         if (Object.keys(newErrors).length > 0) {
             setValidationIdeaErrors(newErrors);
         } else {
@@ -430,13 +450,13 @@ const IdeaDetails = () => {
                                     })}
                                 </MenuList>
                             </Menu>
-                            {validationIdeaErrors.ideaDomain && (
+                        </div>
+
+                        {validationIdeaErrors.ideaDomain && (
                                 <Typography className="text-red-500 text-xs w-fit">
                                     {validationIdeaErrors.ideaDomain}
                                 </Typography>
                             )}
-                        </div>
-
                         <div className="mt-3">
                             <Textarea
                                 disabled={
