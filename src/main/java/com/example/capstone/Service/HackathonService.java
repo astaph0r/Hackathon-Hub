@@ -269,10 +269,10 @@ public class HackathonService {
 		List<Team> teams = hackathon.get().getTeams();
 		List<Pair<Integer, Float>> scores = new ArrayList<>();
 		for (Team team : teams) {
-			Float f= getConsolidatedRating(team);
-			if(team.getConsolidatedRating()!=null)
+			if(team.getStatus()==Status.implemented)
 			{
-		       scores.add(Pair.of(team.getTeamId(),f));
+			 Float f= getConsolidatedRating(team);
+		     scores.add(Pair.of(team.getTeamId(),f));
 			}
 			else
 			{
@@ -303,6 +303,6 @@ public class HackathonService {
 	{
 		throw new UnauthorizedException("Idea implementation reviewing is not ended");
 	}
-
+ 
 }
 }

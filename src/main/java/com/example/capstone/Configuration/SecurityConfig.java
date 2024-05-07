@@ -93,7 +93,7 @@ public class SecurityConfig {
 		return http.csrf().disable().authorizeHttpRequests()
 				.requestMatchers("/User/user", "/User/ssoLogin", "/User/ssoRegister","/User/login", "/User/register", "/User/verifyOtp",
 						"/User/forgotPassword", "/User/changePassword", "/User/logout", "/ContactDetails/Contact",
-						"/Hackathon")
+						"/Hackathon", "/Bot/recommend")
 				.permitAll().requestMatchers("User/{id}")
 				.hasAnyAuthority("ROLE_admin", "ROLE_judge", "ROLE_panelist", "ROLE_participant")
 				.requestMatchers("/Admin/**").hasAuthority("ROLE_admin")
