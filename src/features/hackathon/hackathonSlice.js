@@ -17,7 +17,7 @@ export const fetchHackathons = createAsyncThunk(
     "hackathon/fetchHackathons",
     async (thunkAPI) => {
         try {
-            const response = await axios.get("http://localhost:8080/Hackathon");
+            const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"}/Hackathon`);
             if (!response.data) {
                 return [];
             }
@@ -36,7 +36,7 @@ export const fetchHackathonsAdmin = createAsyncThunk(
                 Authorization: `Bearer ${token}`,
             };
             const response = await axios.get(
-                "http://localhost:8080/Admin/hackathon",
+                `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"}/Admin/hackathon`,
                 { headers }
             );
             if (!response.data) {
@@ -58,7 +58,7 @@ export const hackathonCreation = createAsyncThunk(
                 Authorization: `Bearer ${token}`,
             };
             const response = await axios.post(
-                "http://localhost:8080/Admin/hackathon",
+                `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"}/Admin/hackathon`,
                 formData,
                 { headers }
             );
@@ -82,7 +82,7 @@ export const hackathonEnd = createAsyncThunk(
                 Authorization: `Bearer ${token}`,
             };
             const response = await axios.put(
-                `http://localhost:8080/Admin/hackathon/end/${hackathonId}`,
+                `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"}/Admin/hackathon/end/${hackathonId}`,
                 {},
                 { headers }
             );
@@ -102,7 +102,7 @@ export const newRequest = createAsyncThunk(
     async (formData, thunkAPI) => {
         try {
             const response = await axios.post(
-                "http://localhost:8080/ContactDetails/Contact",
+                `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"}/ContactDetails/Contact`,
                 formData
             );
             return response.data;
@@ -119,7 +119,7 @@ export const fetchRequests = createAsyncThunk(
                 Authorization: `Bearer ${token}`,
             };
             const response = await axios.get(
-                "http://localhost:8080/Admin/contactDetails",
+                `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"}/Admin/contactDetails`,
                 { headers }
             );
             if (!response.data) {

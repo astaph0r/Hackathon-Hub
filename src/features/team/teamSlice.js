@@ -18,7 +18,7 @@ export const teamRegistration = createAsyncThunk(
                 Authorization: `Bearer ${token}`,
             };
             const response = await axios.post(
-                `http://localhost:8080/Team/${hackathonId}/${userId}`,
+                `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"}/Team/${hackathonId}/${userId}`,
                 team,
                 { headers }
             );
@@ -37,7 +37,7 @@ export const ideaSubmission = createAsyncThunk(
                 Authorization: `Bearer ${token}`,
             };
             const response = await axios.post(
-                `http://localhost:8080/Team/idea/${hackathonId}/${userId}`,
+                `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"}/Team/idea/${hackathonId}/${userId}`,
                 ideaData,
                 { headers }
             );
@@ -58,7 +58,7 @@ export const repoSubmission = createAsyncThunk(
                 Authorization: `Bearer ${token}`,
             };
             const response = await axios.post(
-                `http://localhost:8080/Team/ideaFiles/${hackathonId}/${userId}`,
+                `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"}/Team/ideaFiles/${hackathonId}/${userId}`,
                 repoData,
                 { headers }
             );
@@ -81,7 +81,7 @@ export const fetchTeamDetails = createAsyncThunk(
                 Authorization: `Bearer ${token}`,
             };
             const response = await axios.get(
-                `http://localhost:8080/User/Teams/${userId}`,
+                `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"}/User/Teams/${userId}`,
                 { headers }
             );
             if (!response.data) {
@@ -103,7 +103,7 @@ export const fetchJudgeTeamsByHackathonId = createAsyncThunk(
                 Authorization: `Bearer ${token}`,
             };
             const response = await axios.get(
-                `http://localhost:8080/Judge/selectedTeams/${hackathonId}`,
+                `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"}/Judge/selectedTeams/${hackathonId}`,
                 { headers }
             );
             
@@ -127,7 +127,7 @@ export const fetchPanelistTeamsByHackathonId = createAsyncThunk(
             };
             // console.log(token)
             const response = await axios.get(
-                `http://localhost:8080/panelist/${hackathonId}/${panelistid}`,
+                `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"}/panelist/${hackathonId}/${panelistid}`,
                 { headers }
             );
             
@@ -152,7 +152,7 @@ export const rejectTeam = createAsyncThunk(
                 Authorization: `Bearer ${token}`,
             };
             const response = await axios.post(
-                `http://localhost:8080/Team/rejected/${teamId}`, {},
+                `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"}/Team/rejected/${teamId}`, {},
                 { headers }
             );
             // const response2 = await axios.get(
@@ -177,7 +177,7 @@ export const acceptTeam = createAsyncThunk(
                 Authorization: `Bearer ${token}`,
             };
             const response = await axios.put(
-                `http://localhost:8080/Team/selected/${teamId}`, {},
+                `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"}/Team/selected/${teamId}`, {},
                 { headers }
             );
             // const response2 = await axios.get(
@@ -201,7 +201,7 @@ export const rateTeam = createAsyncThunk(
                 Authorization: `Bearer ${token}`,
             };
             const response = await axios.post(
-                `http://localhost:8080/Judge/review/${teamId}`,
+                `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"}/Judge/review/${teamId}`,
                 { rating, feedback, userId },
                 { headers }
             );

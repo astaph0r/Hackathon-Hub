@@ -28,7 +28,7 @@ export const userRegistration = createAsyncThunk(
     async (formData, thunkAPI) => {
         try {
             const response = await axios.post(
-                "http://localhost:8080/User/register",
+                `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"}/User/register`,
                 formData
             );
             return response.data;
@@ -44,7 +44,7 @@ export const otpVerification = createAsyncThunk(
     async (otpDetails, thunkAPI) => {
         try {
             const response = await axios.post(
-                "http://localhost:8080/User/verifyOtp",
+                `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"}/User/verifyOtp`,
                 otpDetails
             );
             let jwt = "";
@@ -70,7 +70,7 @@ export const userLogin = createAsyncThunk(
     async (formData, thunkAPI) => {
         try {
             const response = await axios.post(
-                "http://localhost:8080/User/login",
+                `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"}/User/login`,
                 formData
             );
             let jwt = "";
@@ -97,7 +97,7 @@ export const ssoLogin = createAsyncThunk(
     async (idtoken, thunkAPI) => {
         try {
             const response = await axios.post(
-                "http://localhost:8080/User/ssoLogin",
+                `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"}/User/ssoLogin`,
                 { idtoken }
             );
             let jwt = "";
@@ -124,7 +124,7 @@ export const ssoRegister = createAsyncThunk(
     async (idtoken, thunkAPI) => {
         try {
             const response = await axios.post(
-                "http://localhost:8080/User/ssoRegister",
+                `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"}/User/ssoRegister`,
                 { idtoken }
             );
             let jwt = "";
@@ -153,7 +153,7 @@ export const reattemptLogin = createAsyncThunk(
                 Authorization: `Bearer ${token}`,
             };
             const response = await axios.get(
-                `http://localhost:8080/User/${userId}`,
+                `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"}/User/${userId}`,
                 { headers }
                 // otpDetails
             );
@@ -169,7 +169,7 @@ export const forgotPassword = createAsyncThunk(
     async (Email, thunkAPI) => {
         try {
             const response = await axios.post(
-                "http://localhost:8080/User/forgotPassword",
+                `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"}/User/forgotPassword`,
                 Email
             );
             return response.data;
@@ -183,7 +183,7 @@ export const changePassword = createAsyncThunk(
     async (formData, thunkAPI) => {
         try {
             const response = await axios.post(
-                "http://localhost:8080/User/changePassword",
+                `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"}/User/changePassword`,
                 formData
             );
             return response.data;

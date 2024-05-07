@@ -17,7 +17,7 @@ export const botTechRecommendation = createAsyncThunk(
                 Authorization: `Bearer ${token}`,
             };
             const response = await axios.post(
-                "http://localhost:8080/Bot/recommend",
+                `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"}/Bot/recommend`,
                 botData,
                 { headers }
             );
@@ -42,7 +42,7 @@ export const botRewrite = createAsyncThunk(
                 Authorization: `Bearer ${token}`,
             };
             const response = await axios.post(
-                "http://localhost:8080/Bot/rewrite",
+                `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"}/Bot/rewrite`,
                 botData,
                 { headers }
             );

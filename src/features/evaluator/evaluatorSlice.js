@@ -21,7 +21,7 @@ export const fetchEvaluators = createAsyncThunk(
                 Authorization: `Bearer ${token}`,
             };
             const response = await axios.get(
-                "http://localhost:8080/Admin/Evaluator",
+                `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"}/Admin/Evaluator`,
                 { headers }
             );
             // console.log(response);
@@ -40,7 +40,7 @@ export const registerEvaluator = createAsyncThunk(
                 Authorization: `Bearer ${token}`,
             };
             const response = await axios.post(
-                "http://localhost:8080/Admin/Evaluator",
+                `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"}/Admin/Evaluator`,
                 evaluatorData,
                 { headers }
             );
@@ -62,7 +62,7 @@ export const assignEvaluator = createAsyncThunk(
                 Authorization: `Bearer ${token}`,
             };
             const response = await axios.post(
-                "http://localhost:8080/Admin/assign",
+                `${process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"}/Admin/assign`,
                 evaluatorData,
                 { headers }
             );
