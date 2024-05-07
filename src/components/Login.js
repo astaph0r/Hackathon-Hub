@@ -47,6 +47,12 @@ const Login = ({
         setFormData1((prevstate) => ({ ...prevstate, [name]: value }));
     };
     const handleForgotPasswordClick = () => {
+        setShowError(false);
+        setFormData1({
+            email: "",
+            password: "",
+        });
+        setValidationErrors({});
         handleToggleSignIn(false);
         handleToggleForgotPassword(true);
     };
@@ -54,7 +60,6 @@ const Login = ({
         handleToggleSignIn(false);
         handleToggleSignUp(true);
     };
-
 
     const handleGoogleSignInSuccess = async (res) => {
         try {

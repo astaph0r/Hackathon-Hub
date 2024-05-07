@@ -4,7 +4,11 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Available Scripts
 
+
+Rename 'sample.env' to '.env'
+
 In the project directory, you can run:
+
 
 ### `npm start`
 
