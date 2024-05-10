@@ -1,6 +1,7 @@
 package com.example.capstone.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +30,15 @@ public class PanelistService {
 	@Value("${custom.feature.isDevelopment}")
 	private boolean isDevelopment;
 
+	
+	@Value("${custom.feature.originTimeZone}")
+	private String originTimeZone;
+
+	@Value("${custom.feature.destinationTimeZone}")
+	private String destinationTimeZone;
+
+	
+
 	// Create a new panelist
 	public Panelist createPanelist(User user, Hackathon hackathon) {
 		Panelist panelist = new Panelist();
@@ -53,7 +63,9 @@ public class PanelistService {
 				break;
 			}
 		}
-		LocalDateTime currentTime = LocalDateTime.now();
+		LocalDateTime currentTime = LocalDateTime.now().atZone(ZoneId.of("Africa/Abidjan"))
+                                       .withZoneSameInstant(ZoneId.of("Asia/Kolkata"))
+                                       .toLocalDateTime();
 		if (panelist == null) {
 			throw new UserNotFoundException("Panelist not found");
 		}

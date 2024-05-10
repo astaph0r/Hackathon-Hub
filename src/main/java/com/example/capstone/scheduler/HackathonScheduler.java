@@ -1,6 +1,7 @@
 package com.example.capstone.scheduler;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -22,12 +23,24 @@ public class HackathonScheduler {
 
 	@Value("${custom.feature.adminEmail}")
 	private String adminEmail;
+	
+	@Value("${custom.feature.originTimeZone}")
+	private String originTimeZone;
+
+	@Value("${custom.feature.destinationTimeZone}")
+	private String destinationTimeZone;
+
 	@Autowired
 	private MailService mailService;
 
 	@Scheduled(fixedDelay = 60000) // Execute every minute (adjust as needed)
 	public void updateHackathonStatus() {
-		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime now = LocalDateTime.now().atZone(ZoneId.of("Africa/Abidjan"))
+                                       .withZoneSameInstant(ZoneId.of("Asia/Kolkata"))
+                                       .toLocalDateTime();
+
+		System.out.println("chcecking hackathon status");
+
 		hackathonRepository.findAll().forEach(hackathon -> {
 			if (hackathon.getStartDate().isBefore(now) && hackathon.getHackathonStatus() == HackathonStatus.created
 					&& hackathon.getPanelists().size() > 0 && hackathon.getJudges().size() > 0) {
@@ -57,7 +70,9 @@ public class HackathonScheduler {
 
 	@Scheduled(fixedDelay = 60000 * 60 * 12)
 	public void checkPanelistAssignedOrNot() {
-		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime now = LocalDateTime.now().atZone(ZoneId.of("Africa/Abidjan"))
+                                       .withZoneSameInstant(ZoneId.of("Asia/Kolkata"))
+                                       .toLocalDateTime();
 		hackathonRepository.findAll().forEach(hackathon -> {
 			if (now.isBefore(hackathon.getStartDate())) {
 				if (hackathon.getPanelists().size() == 0) {
@@ -99,7 +114,9 @@ public class HackathonScheduler {
 
 	@Scheduled(fixedDelay = 60000 * 60 * 12)
 	public void checkIdeasShortlisted() {
-		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime now = LocalDateTime.now().atZone(ZoneId.of("Africa/Abidjan"))
+                                       .withZoneSameInstant(ZoneId.of("Asia/Kolkata"))
+                                       .toLocalDateTime();
 		hackathonRepository.findAll().forEach(hackathon -> {
 			if (now.isAfter(hackathon.getIdeaSubmissionDeadline()) && now.isBefore(hackathon.getShortListDeadLine())) {
 				int flag = 0;
@@ -130,7 +147,9 @@ public class HackathonScheduler {
 	
     @Scheduled(fixedDelay = 60000*12*60)
 	public void checkTeamsReviewed() {
-		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime now = LocalDateTime.now().atZone(ZoneId.of("Africa/Abidjan"))
+                                       .withZoneSameInstant(ZoneId.of("Asia/Kolkata"))
+                                       .toLocalDateTime();
 		hackathonRepository.findAll().forEach(hackathon -> {
 			if (hackathon.getReviewStartTime().isBefore(now) && hackathon.getReviewEndTime().isAfter(now)) {
 				for (Judge judge : hackathon.getJudges()) {

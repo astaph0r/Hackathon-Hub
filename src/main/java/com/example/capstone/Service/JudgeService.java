@@ -1,6 +1,7 @@
 package com.example.capstone.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +38,15 @@ public class JudgeService {
 
 	@Value("${custom.feature.isDevelopment}")
 	private boolean isDevelopment;
+	
+
+	@Value("${custom.feature.originTimeZone}")
+	private String originTimeZone;
+
+	@Value("${custom.feature.destinationTimeZone}")
+	private String destinationTimeZone;
+
+	
 
 	/**
 	 * Creates a new Judge entity for a given User and Hackathon.
@@ -85,7 +95,9 @@ public class JudgeService {
 	public List<TeamDetailsToJudgeDTO> getSelectedTeamsDetails(int hackathonId) {
 
 		Hackathon hackathon = hackathonService.findHackathon(hackathonId);
-		LocalDateTime currentTime = LocalDateTime.now();
+		LocalDateTime currentTime = LocalDateTime.now().atZone(ZoneId.of("Africa/Abidjan"))
+                                       .withZoneSameInstant(ZoneId.of("Asia/Kolkata"))
+                                       .toLocalDateTime();
 		if (isDevelopment || currentTime.isAfter(hackathon.getReviewStartTime())
 				&& currentTime.isBefore(hackathon.getReviewEndTime())) {
 			List<Team> teams = judgeRepository.findTeams(hackathonId);

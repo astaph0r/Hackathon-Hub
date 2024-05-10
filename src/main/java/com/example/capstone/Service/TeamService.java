@@ -1,6 +1,7 @@
 package com.example.capstone.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,6 +45,16 @@ public class TeamService {
 
 	@Value("${custom.feature.isDevelopment}")
     private boolean isDevelopment;
+
+	
+	@Value("${custom.feature.originTimeZone}")
+	private String originTimeZone;
+
+	@Value("${custom.feature.destinationTimeZone}")
+	private String destinationTimeZone;
+
+	
+
 	
 	// Create a new team for a hackathon
 	// This method creates a new team with the given name and assigns the given user
@@ -107,7 +118,9 @@ public class TeamService {
 
 	public boolean checkTimeBound(int hackathonId) {
 		Hackathon hackathon = hackathonService.findHackathon(hackathonId);
-		LocalDateTime currentTime = LocalDateTime.now();
+		LocalDateTime currentTime = LocalDateTime.now().atZone(ZoneId.of("Africa/Abidjan"))
+                                       .withZoneSameInstant(ZoneId.of("Asia/Kolkata"))
+                                       .toLocalDateTime();
 		if (currentTime.isBefore(hackathon.getStartDate())) {
 			throw new UnauthorizedException("Hackathon is not Started");
 		} else if (currentTime.isAfter(hackathon.getIdeaSubmissionDeadline())) {
@@ -166,7 +179,9 @@ public class TeamService {
 	}
 	public boolean checkTimeBoundForPanelist(int hackathonId) {
 		Hackathon hackathon = hackathonService.findHackathon(hackathonId);
-		LocalDateTime currentTime = LocalDateTime.now();
+		LocalDateTime currentTime = LocalDateTime.now().atZone(ZoneId.of("Africa/Abidjan"))
+                                       .withZoneSameInstant(ZoneId.of("Asia/Kolkata"))
+                                       .toLocalDateTime();
 		if (currentTime.isBefore(hackathon.getIdeaSubmissionDeadline())) {
 			throw new UnauthorizedException("Team shortlisting not started is not Started");
 		} else if (currentTime.isAfter(hackathon.getShortListDeadLine())) {
@@ -281,7 +296,9 @@ public class TeamService {
 		User user = userService.getUser(userId);
 		List<Participant> participants = user.getParticipants();
 		Hackathon hackathon = hackathonService.findHackathon(hackathonId);
-		LocalDateTime currentTime = LocalDateTime.now();
+		LocalDateTime currentTime = LocalDateTime.now().atZone(ZoneId.of("Africa/Abidjan"))
+                                       .withZoneSameInstant(ZoneId.of("Asia/Kolkata"))
+                                       .toLocalDateTime();
 		if (isDevelopment || currentTime.isBefore(hackathon.getImplementationSubmissionDeadLine())
 				&& currentTime.isAfter(hackathon.getShortListDeadLine())) {
 			boolean flag = true;

@@ -1,6 +1,7 @@
 package com.example.capstone.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -48,6 +49,14 @@ public class HackathonService {
 	private MailService mailService;
 	@Value("${custom.feature.isDevelopment}")
 	private boolean isDevelopment;
+	
+
+	@Value("${custom.feature.originTimeZone}")
+	private String originTimeZone;
+
+	@Value("${custom.feature.destinationTimeZone}")
+	private String destinationTimeZone;
+
 	
 	@Autowired
 	private TeamService teamService;
@@ -263,7 +272,9 @@ public class HackathonService {
 	 */
 	public void endHackathon(int hackathonId) {
 		Optional<Hackathon> hackathon = hackathonRepository.findById(hackathonId);
-		LocalDateTime currentTime=LocalDateTime.now();
+		LocalDateTime currentTime=LocalDateTime.now().atZone(ZoneId.of("Africa/Abidjan"))
+                                       .withZoneSameInstant(ZoneId.of("Asia/Kolkata"))
+                                       .toLocalDateTime();
 		if(isDevelopment || currentTime.isAfter(hackathon.get().getReviewEndTime()))
 		{
 		List<Team> teams = hackathon.get().getTeams();

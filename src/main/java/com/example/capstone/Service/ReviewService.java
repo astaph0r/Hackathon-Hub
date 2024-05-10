@@ -1,6 +1,7 @@
 package com.example.capstone.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +25,21 @@ public class ReviewService {
 	@Value("${custom.feature.isDevelopment}")
 	private boolean isDevelopment;
 
+	@Value("${custom.feature.originTimeZone}")
+	private String originTimeZone;
+
+	@Value("${custom.feature.destinationTimeZone}")
+	private String destinationTimeZone;
+
+	
 	public void addReview(int teamid, ReviewDTO reviewDTO) {
 		Optional<Review> reviewOptional = reviewRepository.findByTeamIdAndUserId(teamid, reviewDTO.getUserId());
 		if (reviewOptional.isEmpty()) {
 			Team team = teamService.getTeam(teamid);
 			Hackathon hackathon = team.getHackathon();
-			LocalDateTime currentTime = LocalDateTime.now();
+			LocalDateTime currentTime = LocalDateTime.now().atZone(ZoneId.of("Africa/Abidjan"))
+                                       .withZoneSameInstant(ZoneId.of("Asia/Kolkata"))
+                                       .toLocalDateTime();
 			if (isDevelopment || currentTime.isAfter(hackathon.getReviewStartTime())
 					&& currentTime.isBefore(hackathon.getReviewEndTime())) {
 				Review review = new Review();
