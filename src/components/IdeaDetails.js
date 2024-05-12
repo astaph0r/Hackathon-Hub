@@ -339,7 +339,7 @@ const IdeaDetails = () => {
         if (ideaData.ideaBody && ideaData.ideaBody.length > 3000) {
             newErrors.ideaBody =
                 "Idea Title Should Not Contain More Than 3000 Characters";
-        }   
+        }
         if (Object.keys(newErrors).length > 0) {
             setValidationIdeaErrors(newErrors);
         } else {
@@ -453,10 +453,10 @@ const IdeaDetails = () => {
                         </div>
 
                         {validationIdeaErrors.ideaDomain && (
-                                <Typography className="text-red-500 text-xs w-fit">
-                                    {validationIdeaErrors.ideaDomain}
-                                </Typography>
-                            )}
+                            <Typography className="text-red-500 text-xs w-fit">
+                                {validationIdeaErrors.ideaDomain}
+                            </Typography>
+                        )}
                         <div className="mt-3">
                             <Textarea
                                 disabled={
@@ -596,6 +596,19 @@ const IdeaDetails = () => {
                         </div>
                     </div>
                     <div className="col-span-1 lg:col-span-2">
+                        <div className="flex justify-start gap-1">
+                            <Typography className="font-bold">
+                                Idea Status:{" "}
+                            </Typography>
+                            <span className="flex">
+                                <Chip
+                                    size="sm"
+                                    value={teamDetails.status || ""}
+                                    color="teal"
+                                    className="font-bold text-white flex"
+                                />
+                            </span>
+                        </div>
                         {recommendations.length > 0 ? (
                             <div>
                                 <Typography className="font-bold">

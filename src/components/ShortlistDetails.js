@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { USER, HACKATHONS } from "../constants";
+import { USER, HACKATHONS, IS_DEVELOPMENT } from "../constants";
 import {
     Button,
     Card,
@@ -18,6 +18,7 @@ import DOMPurify from "dompurify";
 import { useDispatch, useSelector } from "react-redux";
 import {
     acceptTeam,
+    clearTeams,
     fetchPanelistTeamsByHackathonId,
     rejectTeam,
 } from "../features/team/teamSlice";
@@ -145,6 +146,120 @@ const ShortlistDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
         }
     };
 
+    const formatSecondsToDDHHMMSS = (s) => {
+        const isNegative = s < 0;
+        s = Math.abs(s / 1000); // Convert to positive value for calculations
+
+        const days = parseInt(s / (24 * 60 * 60));
+        const hours = parseInt((s % (24 * 60 * 60)) / (60 * 60));
+        const minutes = parseInt((s % (60 * 60)) / 60);
+        const seconds = parseInt(s % 60);
+
+        const components = [days, hours, minutes, seconds].map((num) =>
+            String(num).padStart(2, "0")
+        );
+        let formattedString = components.join(":");
+
+        if (isNegative) {
+            formattedString = "-" + formattedString; // Prepend "-" sign if input is negative
+        }
+
+        return formattedString;
+    };
+
+    const ideaSubmissionDeadline = new Date(
+        selectedHackathon.ideaSubmissionDeadline
+    );
+    const shortListDeadline = new Date(selectedHackathon.shortListDeadline);
+    const implementationDeadline = new Date(
+        selectedHackathon.implementationDeadline
+    );
+
+    const reviewStartTime = new Date(selectedHackathon.reviewStartTime);
+    const reviewEndTime = new Date(selectedHackathon.reviewEndTime);
+
+    const ISTOffset = 330; //+5:30hrs
+
+    const [currentDate, setCurrentDate] = useState(
+        new Date(
+            new Date().getTime() +
+                (ISTOffset + new Date().getTimezoneOffset()) * 60000
+        )
+    );
+
+    const [duringShortlist, setDuringShortlist] = useState(
+        currentDate > ideaSubmissionDeadline && currentDate < shortListDeadline
+    );
+    const [beforeShortlist, setBeforeShortlist] = useState(
+        currentDate < ideaSubmissionDeadline
+    );
+    const [afterShortlist, setAfterShortlist] = useState(
+        currentDate > shortListDeadline
+    );
+    const [percentageElapsed, setPercentageElapsed] = useState(
+        100 -
+            Math.floor(
+                ((shortListDeadline - currentDate) * 100) /
+                    (shortListDeadline - ideaSubmissionDeadline)
+            )
+    );
+
+    const [timeLeft, setTimeLeft] = useState(
+        formatSecondsToDDHHMMSS(shortListDeadline - currentDate)
+    );
+
+    useEffect(() => {
+        const updateCurrentTime = setTimeout(function () {
+            setCurrentDate(
+                new Date(
+                    new Date().getTime() +
+                        (ISTOffset + new Date().getTimezoneOffset()) * 60000
+                )
+            );
+            setDuringShortlist(
+                currentDate > ideaSubmissionDeadline &&
+                    currentDate < shortListDeadline
+            );
+            setBeforeShortlist(currentDate < ideaSubmissionDeadline);
+            setAfterShortlist(currentDate > shortListDeadline);
+            setPercentageElapsed(
+                100 -
+                    Math.floor(
+                        ((shortListDeadline - currentDate) * 100) /
+                            (shortListDeadline - ideaSubmissionDeadline)
+                    )
+            );
+            setTimeLeft(
+                formatSecondsToDDHHMMSS(shortListDeadline - currentDate)
+            );
+        }, 1000);
+
+        return () => {
+            // this should work flawlessly besides some milliseconds lost here and there
+            clearTimeout(updateCurrentTime);
+        };
+    }, [currentDate]);
+
+    useEffect(() => {
+        try {
+            if (duringShortlist) {
+                dispatch(
+                    fetchPanelistTeamsByHackathonId({
+                        hackathonId: userData?.assignedHackathon,
+                        panelistid: userData?.userId,
+                        token,
+                    })
+                );
+            }
+
+            if (!duringShortlist) {
+                dispatch(clearTeams());
+            }
+        } catch (error) {
+            toast.error(`Error: ${error.message}`);
+        }
+    }, [duringShortlist]);
+
     return (
         <>
             {/* {!loading &&  */}
@@ -176,6 +291,38 @@ const ShortlistDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
                                     Theme: {selectedHackathon?.theme || ""}
                                 </Typography>
                             </div>
+                            <div className="w-full px-3">
+                                <div className="mb-2 flex items-center justify-between gap-4">
+                                    <Typography color="blue-gray" variant="h6">
+                                        Shortlist Deadline
+                                    </Typography>
+
+                                    {IS_DEVELOPMENT ? (
+                                        <Typography color="orange" variant="h6">
+                                            Presentation Mode
+                                        </Typography>
+                                    ) : duringShortlist ? (
+                                        <Typography
+                                            color="blue-gray"
+                                            variant="h6"
+                                        >
+                                            {timeLeft}
+                                        </Typography>
+                                    ) : beforeShortlist ? (
+                                        <Typography color="red" variant="h6">
+                                            {"Shortlist period hasn't started."}
+                                        </Typography>
+                                    ) : afterShortlist ? (
+                                        <Typography color="red" variant="h6">
+                                            {"Shortlist period is over."}
+                                        </Typography>
+                                    ) : null}
+                                </div>{" "}
+                                {!IS_DEVELOPMENT && duringShortlist ? (
+                                    <Progress value={percentageElapsed} />
+                                ) : null}
+                            </div>
+                            {/* <ProgressBar /> */}
                             {/* <div className="w-full px-2">
                                 <div className="mb-2 flex items-center justify-between gap-4">
                                     <Typography color="blue-gray" variant="h6">

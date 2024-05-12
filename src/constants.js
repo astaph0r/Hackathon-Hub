@@ -1,5 +1,4 @@
-const USER = 
-{
+const USER = {
     userId: 9,
     name: "Ankit Panelist 5",
     email: "ankitbhanja99+panelis5@gmail.com",
@@ -8,8 +7,7 @@ const USER =
     available: false,
 };
 
-const HACKATHONS = 
-[
+const HACKATHONS = [
     {
         hackathonId: 1,
         name: "Hack 2",
@@ -144,8 +142,6 @@ const HACKATHONS =
         thirdTeamId: null,
     },
 ];
-
-const CLIENT_ID = "855795644664-9q4db9e2ganku0bt3ilfdk87p5pr1gm1.apps.googleusercontent.com"
 
 const EVALUATORS = [
     {
@@ -332,4 +328,19 @@ const REQUESTS = [
     },
 ];
 
-export { HACKATHONS, USER, EVALUATORS, TEAMS, REQUESTS, CLIENT_ID };
+const CLIENT_ID =
+    "855795644664-9q4db9e2ganku0bt3ilfdk87p5pr1gm1.apps.googleusercontent.com";
+
+const variable = process.env.REACT_APP_IS_DEVELOPMENT || "true";
+const IS_DEVELOPMENT = variable === "true";
+console.log(IS_DEVELOPMENT);
+
+export {
+    HACKATHONS,
+    USER,
+    EVALUATORS,
+    TEAMS,
+    REQUESTS,
+    CLIENT_ID,
+    IS_DEVELOPMENT,
+};

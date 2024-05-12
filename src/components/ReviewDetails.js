@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { USER } from "../constants";
+import { IS_DEVELOPMENT, USER } from "../constants";
 import {
     Button,
     Card,
@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import DOMPurify from "dompurify";
 import { Link } from "react-router-dom";
 import {
+    clearTeams,
     fetchJudgeTeamsByHackathonId,
     rateTeam,
 } from "../features/team/teamSlice";
@@ -112,6 +113,116 @@ const ReviewDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
         setValidationErrors(newErrors);
     };
 
+    const formatSecondsToDDHHMMSS = (s) => {
+        const isNegative = s < 0;
+        s = Math.abs(s / 1000); // Convert to positive value for calculations
+
+        const days = parseInt(s / (24 * 60 * 60));
+        const hours = parseInt((s % (24 * 60 * 60)) / (60 * 60));
+        const minutes = parseInt((s % (60 * 60)) / 60);
+        const seconds = parseInt(s % 60);
+
+        const components = [days, hours, minutes, seconds].map((num) =>
+            String(num).padStart(2, "0")
+        );
+        let formattedString = components.join(":");
+
+        if (isNegative) {
+            formattedString = "-" + formattedString; // Prepend "-" sign if input is negative
+        }
+
+        return formattedString;
+    };
+
+    const ideaSubmissionDeadline = new Date(
+        selectedHackathon.ideaSubmissionDeadline
+    );
+    const shortListDeadline = new Date(selectedHackathon.shortListDeadline);
+    const implementationDeadline = new Date(
+        selectedHackathon.implementationDeadline
+    );
+
+    const reviewStartTime = new Date(selectedHackathon.reviewStartTime);
+    const reviewEndTime = new Date(selectedHackathon.reviewEndTime);
+
+    const ISTOffset = 330; //+5:30hrs
+
+    const [currentDate, setCurrentDate] = useState(
+        new Date(
+            new Date().getTime() +
+                (ISTOffset + new Date().getTimezoneOffset()) * 60000
+        )
+    );
+
+    const [duringReview, setDuringReview] = useState(
+        currentDate > reviewStartTime && currentDate < reviewEndTime
+    );
+    const [beforeReview, setBeforeReview] = useState(
+        currentDate < reviewStartTime
+    );
+    const [afterReview, setAfterReview] = useState(
+        currentDate > reviewEndTime
+    );
+    const [percentageElapsed, setPercentageElapsed] = useState(
+        100 -
+            Math.floor(
+                ((reviewEndTime - currentDate) * 100) /
+                    (reviewEndTime - reviewStartTime)
+            )
+    );
+
+    const [timeLeft, setTimeLeft] = useState(
+        formatSecondsToDDHHMMSS(reviewEndTime - currentDate)
+    );
+
+    useEffect(() => {
+        const updateCurrentTime = setTimeout(function () {
+            setCurrentDate(
+                new Date(
+                    new Date().getTime() +
+                        (ISTOffset + new Date().getTimezoneOffset()) * 60000
+                )
+            );
+            setDuringReview(
+                currentDate > reviewStartTime && currentDate < reviewEndTime
+            );
+            setBeforeReview(currentDate < reviewStartTime);
+            setAfterReview(currentDate > reviewEndTime);
+            setPercentageElapsed(
+                100 -
+                    Math.floor(
+                        ((reviewEndTime - currentDate) * 100) /
+                            (reviewEndTime - reviewStartTime)
+                    )
+            );
+            setTimeLeft(formatSecondsToDDHHMMSS(reviewEndTime - currentDate));
+        }, 1000);
+
+        return () => {
+            // this should work flawlessly besides some milliseconds lost here and there
+            clearTimeout(updateCurrentTime);
+        };
+    }, [currentDate]);
+
+    useEffect(() => {
+        try {
+            if (duringReview) {
+                dispatch(
+                    fetchJudgeTeamsByHackathonId({
+                        hackathonId: userData?.assignedHackathon,
+                        token,
+                    })
+                );
+            }
+
+            if (!duringReview) {
+                dispatch(clearTeams());
+            }
+        } catch (error) {
+            toast.error(`Error: ${error.message}`);
+        }
+    }, [duringReview]);
+
     return (
         <>
             {/* {!loading &&  */}
@@ -142,6 +253,37 @@ const ReviewDetails = ({ hackathons, selectedIdeaId, IDEAS }) => {
                                 <Typography variant="h4">
                                     Theme: {selectedHackathon?.theme || ""}
                                 </Typography>
+                            </div>
+                            <div className="w-full px-3">
+                                <div className="mb-2 flex items-center justify-between gap-4">
+                                    <Typography color="blue-gray" variant="h6">
+                                        Review Deadline
+                                    </Typography>
+
+                                    {IS_DEVELOPMENT ? (
+                                        <Typography color="orange" variant="h6">
+                                            Presentation Mode
+                                        </Typography>
+                                    ) : duringReview ? (
+                                        <Typography
+                                            color="blue-gray"
+                                            variant="h6"
+                                        >
+                                            {timeLeft}
+                                        </Typography>
+                                    ) : beforeReview ? (
+                                        <Typography color="red" variant="h6">
+                                            {"Review period hasn't started."}
+                                        </Typography>
+                                    ) : afterReview ? (
+                                        <Typography color="red" variant="h6">
+                                            {"Review period is over."}
+                                        </Typography>
+                                    ) : null}
+                                </div>{" "}
+                                {!IS_DEVELOPMENT && duringReview ? (
+                                    <Progress value={percentageElapsed} />
+                                ) : null}
                             </div>
                             {/* <div className="w-full px-2">
                                 <div className="mb-2 flex items-center justify-between gap-4">
