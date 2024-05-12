@@ -13,6 +13,10 @@ import { clearEvaluators } from "../features/evaluator/evaluatorSlice";
 import { clearTeams } from "../features/team/teamSlice";
 import Cookies from "js-cookie";
 import { clearHackathons } from "../features/hackathon/hackathonSlice";
+import {
+    clearBotRecommendationOutput,
+    clearBotRewriteOutput,
+} from "../features/bot/botSlice";
 
 const ProfileDrawer = ({ opens, onClose }) => {
     const [editMode, setEditMode] = useState(false);
@@ -43,7 +47,9 @@ const ProfileDrawer = ({ opens, onClose }) => {
     const logoutHandler = () => {
         dispatch(clearEvaluators());
         dispatch(clearTeams());
-        dispatch(clearHackathons())
+        dispatch(clearHackathons());
+        dispatch(clearBotRecommendationOutput());
+        dispatch(clearBotRewriteOutput());
         dispatch(logout());
         Cookies.remove("userId");
         Cookies.remove("token");

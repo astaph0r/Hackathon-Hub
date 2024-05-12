@@ -342,7 +342,7 @@ const Signup = ({
                                         // type="password"
                                         type={passwordInputType[1]}
                                         label="Confirm password"
-                                        placeholder="Label Password"
+                                        placeholder="Confirm Password"
                                         disabled={emailVerification}
                                         onChange={(e) =>
                                             setConfirmPassword(e.target.value)

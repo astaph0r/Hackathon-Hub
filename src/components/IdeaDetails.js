@@ -379,8 +379,8 @@ const IdeaDetails = () => {
                     <div className="col-span-1 lg:col-span-3">
                         {!isLeader ? (
                             <Typography
-                                variant="small"
-                                className="mb-2 text-gray-600"
+                                variant="h6"
+                                className="mb-2 px-1 text-yellow-700"
                             >
                                 Only Team Leader can submit the idea.
                             </Typography>
