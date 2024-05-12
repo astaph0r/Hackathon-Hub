@@ -123,6 +123,7 @@ const Login = ({
     // const userData = useSelector(selectUserDetails);
     const [validationErrors, setValidationErrors] = useState({});
     const handleSubmit = async (e) => {
+        e.preventDefault();
         const newErrors = {};
         if (!formData1.email) {
             newErrors.email = "Email is Required!";
@@ -135,7 +136,7 @@ const Login = ({
             setValidationErrors(newErrors);
         } else {
             try {
-                e.preventDefault();
+                
                 await dispatch(userLogin(formData1)).unwrap();
                 const token = Cookies.get("token");
                 if (token) {
