@@ -185,11 +185,6 @@ const TeamMembers = () => {
         };
     }, [currentDate]);
 
-    console.log(duringSubmission);
-    
-    console.log(currentDate);
-    console.log(startTime);
-    console.log(ideaSubmissionDeadline);
 
     return (
         <Card className="w-full mb-4">
